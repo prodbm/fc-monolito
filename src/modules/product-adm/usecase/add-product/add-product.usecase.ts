@@ -15,8 +15,9 @@ export default class AddProductUseCase {
       id: new Id(input.id),
       name: input.name,
       description: input.description,
-      purchasePrice: input.purchasePrice,
+      purchasePrice: input.purchasePrice,      
       stock: input.stock,
+      salesPrice: input.salesPrice,
     };
 
     const product = new Product(props);
@@ -27,6 +28,7 @@ export default class AddProductUseCase {
       name: product.name,
       description: product.description,
       purchasePrice: product.purchasePrice,
+      salesPrice: product.salesPrice,
       stock: product.stock,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,

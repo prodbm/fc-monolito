@@ -1,7 +1,8 @@
 import { Sequelize } from "sequelize-typescript"
-import { InovoiceItemModel } from "../repository/invoice-item.model"
+import { InvoiceItemModel } from "../repository/invoice-item.model"
 import { InvoiceModel } from "../repository/invoice.model"
-import InvoiceFacadeFactory from "../usecase/factory/invoice.facade.factory"
+import InvoiceFacadeFactory from "../../invoice/factory/invoice.facade.factory"
+
 describe("Invoice Facade test", () => {
 
     let sequelize: Sequelize
@@ -14,7 +15,7 @@ describe("Invoice Facade test", () => {
             sync: { force: true }
         })
 
-        sequelize.addModels([InvoiceModel, InovoiceItemModel])
+        sequelize.addModels([InvoiceModel, InvoiceItemModel])
         await sequelize.sync()
     })
 
@@ -52,8 +53,9 @@ describe("Invoice Facade test", () => {
 
         await facade.generate(input);
 
-        const invoice = await InvoiceModel.findOne({ where: { name: "Lucian" }, include: [InovoiceItemModel] });
+        const invoice = await InvoiceModel.findOne({ where: { name: "Lucian" }, include: [InvoiceItemModel] });
 
+        console.log(invoice);
         expect(invoice).toBeDefined();
         expect(invoice.name).toEqual(input.name);
         expect(invoice.document).toEqual(input.document);
@@ -73,13 +75,13 @@ describe("Invoice Facade test", () => {
     })
 
     it("should find a invoice", async () => {
-        const item1 = new InovoiceItemModel({
+        const item1 = new InvoiceItemModel({
             id: "1",
             name: "item 1",
             price: 100
         });
 
-        const item2 = new InovoiceItemModel({
+        const item2 = new InvoiceItemModel({
             id: "2",
             name: "item 2",
             price: 200
@@ -100,11 +102,13 @@ describe("Invoice Facade test", () => {
             updatedAt: new Date(),
             items: [item1, item2]
 
-        }, { include: [{ model: InovoiceItemModel }], }
+        }, { include: [{ model: InvoiceItemModel }], }
         );
 
         const facade = InvoiceFacadeFactory.create();
         const result = await facade.find({ id: invoice.id });
+
+        console.log(result);
 
         expect(result.id).toEqual(invoice.id);
         expect(result.name).toEqual(invoice.name);

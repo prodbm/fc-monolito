@@ -52,6 +52,8 @@ describe("Find Invoice use case unit test", () => {
 
         const result = await usecase.execute(input)
 
+        console.log(result);
+
         expect(repository.find).toHaveBeenCalled();
         expect(result.id).toEqual(input.id);
         expect(result.name).toEqual(invoice.name);

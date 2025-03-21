@@ -3,7 +3,7 @@ import Id from "../../@shared/domain/value-object/id.value-object";
 import InovoiceItem from "../domain/Invoice-item";
 import Invoice from "../domain/invoice";
 import InvoiceGateway from "../gateway/invoice.gateway";
-import { InovoiceItemModel } from "./invoice-item.model";
+import { InvoiceItemModel } from "./invoice-item.model";
 import { InvoiceModel } from "./invoice.model";
 
 export default class InvoiceRepository implements InvoiceGateway {
@@ -30,12 +30,12 @@ export default class InvoiceRepository implements InvoiceGateway {
             }),
 
 
-        }, { include: [{ model: InovoiceItemModel }], }
+        }, { include: [{ model: InvoiceItemModel }], }
         );
     }
 
     async find(id: string): Promise<Invoice> {
-        const resut = await InvoiceModel.findOne({ where: { id: id }, include: [InovoiceItemModel] });
+        const resut = await InvoiceModel.findOne({ where: { id: id }, include: [InvoiceItemModel] });
 
         if (!resut) {
             throw new Error("Invoice not found");

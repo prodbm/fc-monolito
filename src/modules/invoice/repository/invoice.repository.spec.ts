@@ -1,10 +1,10 @@
 import { Sequelize } from "sequelize-typescript";
 import Invoice from "../domain/invoice";
-import { InovoiceItemModel } from "./invoice-item.model";
+import { InvoiceItemModel } from "./invoice-item.model";
 import { InvoiceModel } from "./invoice.model";
 import Id from "../../@shared/domain/value-object/id.value-object";
 import Address from "../../@shared/domain/value-object/address";
-import InovoiceItem from "../domain/Invoice-item";
+import InvoiceItem from "../domain/Invoice-item";
 import InvoiceRepository from "./invoice.repository";
 
 describe("Invoice Repository test", () => {
@@ -19,7 +19,7 @@ describe("Invoice Repository test", () => {
             sync: { force: true }
         })
 
-        sequelize.addModels([InvoiceModel, InovoiceItemModel])
+        sequelize.addModels([InvoiceModel, InvoiceItemModel])
         await sequelize.sync()
     });
 
@@ -28,13 +28,13 @@ describe("Invoice Repository test", () => {
     });
 
     it("should create a invoice", async () => {
-        const item1 = new InovoiceItem(
+        const item1 = new InvoiceItem(
             new Id().id,
             "item 1",
             100
         );
 
-        const item2 = new InovoiceItem(
+        const item2 = new InvoiceItem(
             new Id().id,
             "item 2",
             200
@@ -61,7 +61,7 @@ describe("Invoice Repository test", () => {
         const repository = new InvoiceRepository();
         await repository.generate(invoice);
 
-        const invoiceDb = await InvoiceModel.findOne({ where: { id: invoice.id.id }, include: [InovoiceItemModel] });
+        const invoiceDb = await InvoiceModel.findOne({ where: { id: invoice.id.id }, include: [InvoiceItemModel] });
 
         expect(invoiceDb).toBeDefined();
         expect(invoiceDb.id).toEqual(invoice.id.id);
@@ -89,13 +89,13 @@ describe("Invoice Repository test", () => {
 
     it("should find a invoice", async () => {
 
-        const item1 = new InovoiceItemModel({
+        const item1 = new InvoiceItemModel({
             id: "1",
             name: "item 1",
             price: 100
         });
 
-        const item2 = new InovoiceItemModel({
+        const item2 = new InvoiceItemModel({
             id: "2",
             name: "item 2",
             price: 200
@@ -116,7 +116,7 @@ describe("Invoice Repository test", () => {
             updatedAt: new Date(),
             items: [item1, item2]
 
-        }, { include: [{ model: InovoiceItemModel }], }
+        }, { include: [{ model: InvoiceItemModel }], }
         );      
 
         const repository = new InvoiceRepository();
